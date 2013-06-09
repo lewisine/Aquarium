@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js canvas - geometry - earth</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #AAFFEE;
+				color: #fff;
+				margin: 0px;
+				overflow: hidden;
+			}
+	
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #0080ff;
+			}
+			.navi {  /* 메뉴 전체 영역에 대한 스타일 */
+	list-style-type: none; /* 불릿 기호 없앰 */
+	height: 40px; /* 내비게이션 높이 */
+	padding: 0; 
+	margin: 0; 
+}
+.navi li { /* 메뉴 각 항목에 대한 스타일 */
+	float: left; /* 왼쪽부터 표시 */
+	position: relative; /* 순서대로 표시 */
+	padding: 0; /* 안여백 없음 */
+	line-height: 40px; /* 줄간격 */
+	background:#600;  /* 내비게이션 전체 배경색 */
+}
+
+.navi li a { /* 메뉴 항목에서도 링크에 대한 스타일 */
+	display: block; /* 영역을 만듦 */
+	font-family:"굴림"; /* 글꼴 */
+	font-weight:600; /* 진하게 */
+	font-size:14px;	/* 글자크기 */
+	padding: 5px 25px; /* 안여백 */	
+	color: #fff; /* 메인 메뉴 글자색 */
+	text-decoration: none; /* 밑줄 없앰 */
+}
+.navi li a:hover { /*script src="js/libs/stats.min.js 메인 메뉴에 마우스 오버했을 때의 스타일 */
+	color:#F90; /* 마우스 오버했을 때 글자색 */
+}
+.navi li ul {  /* 서브 메뉴 영역에 대한 스타일 */
+	opacity: 0; /* 투명하게 표시 - 결국 평소엔 안보임 */
+	position: absolute; /* 고정 위치에 표시 */
+	left: 0; /* left 좌표는 메인 메뉴에서 움직이지 않음 */
+	width: 180px; /* 서브 메뉴 너비 */
+	background: #D8AFAF; /* 서브 메뉴 배경색 */
+	list-style-type: none; /* 서브 메뉴 항목의 불릿 없앰 */
+	padding: 0; /* 안여백 없음 */
+	margin: 0;  /* 여백 없음 */
+}
+.navi li:hover ul { /* 메인 메뉴 위로 마우스 오버했을 때 서브 메뉴 스타일 */
+	opacity: 1; /* 서브 메뉴 불투명해짐 -> 화면에 보임 */
+}
+.navi li ul li { /* 서브 메뉴 각 항목의 스타일 */
+	float: none; /* 플로팅하지 않음 */
+	position: static; /* 항목 크기에 맞게 배치됨 */
+	height: 0; /*높이값 없음 */
+	line-height: 0; /* 줄간격 없음 */
+	background: none; /* 배경 없음*/
+}
+.navi li:hover  ul li { 
+	height: 50px; 
+	line-height: 20px; 
+	padding:5px 0;
+	
+}
+.navi li ul li a {
+	display:block;
+	height:50px;
+	width:50px;
+/*	background:url("img/apple.png") left no-repeat;	*/
+	/*background: #D8AFAF; 
+	font-family:"標楷體";
+	font-weight:600; 
+	font-size:14px;
+	color:#900;*/
+}
+.navi li ul li .feed{
+	display:block;
+	height:50px;
+	width:50px;
+	background:url("img/apple.png") left no-repeat;
+}
+.navi li ul li .time{
+	display:block;
+	height:50px;
+	width:50px;
+	background:url("img/time.png") left no-repeat;
+}
+.navi li ul li .pic{
+	display:block;
+	height:50px;
+	width:50px;
+	background:url("img/picture.png") left no-repeat;
+}
+.navi li ul li .money{
+	display:block;
+	height:50px;
+	width:50px;
+	background:url("img/money.png") left no-repeat;
+}
+.navi li ul li a:hover { 
+	background: #900;
+}
+
+.navi li { -webkit-transition: all 0.2s; }
+.navi li a { -webkit-transition: all 0.5s; }
+.navi li ul { -webkit-transition: all 1s; }
+.navi li ul li { -webkit-transition: height 0.5s; }
+
+		</style>
+	</head>
+	<body>
+	<div id="menu">
+	<ul class="navi">
+	<li><a href="#"> Home </a></li>
+	<li><a href="#"> 動作</a>
+    	<ul>
+       	  <li>
+            <ul class="feed"><li><a href="feed.html" target="_blank">餵食</a></li></ul></li>
+            <li><ul class="time"><li><a href="#"> 時間</a></li></ul></li>
+            <li><ul class="pic"><li><a href="#"> 裝飾</a></li></ul></li>
+            <li><ul class="money"><li><a href="#"> 金錢</a></li></ul></li>        	
+        </ul>
+    </li>
+	<li><a href="#"> Help </a>
+    	<ul>
+         	<li><a href="#"> Q & A </a></li>
+            <li><a href="#"> Help Index</a></li>      	
+        </ul> 
+    </li>  
+	<li><a href="#"> 商城</a></li>            
+</ul>
+</div>
+
+		<div id="container"></div>
+		
+
+		<script src="build/three.min.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script src="js/loaders/MTLLoader.js"></script>
+		<script src="js/loaders/OBJMTLLoader.js"></script>
+
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
+		<script>
+
+			var container, stats;
+			var camera, scene, renderer;
+			var group;
+			var mouseX = 0, mouseY = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+			var isfeed;
+			var myfish = new THREE.Object3D();
+			var myfood = new THREE.Object3D();
+			var objects = [];
+			var projector;
+			var totalfood;
+			init();
+			animate();
+
+			function init() {
+
+				container = document.getElementById( 'container' );
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = 500;
+
+				scene = new THREE.Scene();
+				projector = new THREE.Projector();
+				group = new THREE.Object3D();
+				scene.add( group );
+
+				// earth
+
+				var earthTexture = new THREE.Texture();
+				var loader = new THREE.ImageLoader();
+
+				loader.addEventListener( 'load', function ( event ) {
+
+					earthTexture.image = event.content;
+					earthTexture.needsUpdate = true;
+
+				} );
+
+				loader.load( 'img/water.png' );
+
+				var geometry = new THREE.CubeGeometry(400,300,300,0,0,0);
+	                        var material = new THREE.MeshNormalMaterial({color: 0xaaffee,transparent:true,opacity:0.2});
+                
+	                        var cube = new THREE.Mesh(geometry, material);
+				
+	                        group.add(cube);
+				/*var geometry = new THREE.CubeGeometry(400, 300, 300, 0, 0, 0)
+				var material = new THREE.MeshBasicMaterial( { map: earthTexture, overdraw: true } );
+
+				var mesh = new THREE.Mesh( geometry, material );
+				group.add( mesh );
+				*/
+				totalfood=0;
+				//FISH
+				var loader = new THREE.OBJMTLLoader();
+				loader.addEventListener( 'load', function ( event ) {
+
+					var object = event.content;
+					object.scale.set(10,10,10);
+					object.position.y = 0;
+					object.position.x = 0;
+					object.position.z = 0;
+					myfish=object;
+					scene.add( object );
+
+				});
+				loader.load('img/fish.obj','img/fish.mtl');
+				// shadow
+
+				var canvas = document.createElement( 'canvas' );
+				canvas.width = 128;
+				canvas.height = 128;
+
+				var context = canvas.getContext( '2d' );
+				var gradient = context.createRadialGradient( canvas.width / 2, canvas.height / 2, 0, canvas.width / 2, canvas.height / 2, canvas.width / 2 );
+				gradient.addColorStop( 0.1, 'rgba(210,210,210,1)' );
+				gradient.addColorStop( 1, 'rgba(255,255,255,1)' );
+
+				context.fillStyle = gradient;
+				context.fillRect( 0, 0, canvas.width, canvas.height );
+
+				var texture = new THREE.Texture( canvas );
+				texture.needsUpdate = true;
+
+				var geometry = new THREE.PlaneGeometry( 300, 300, 3, 3 );
+				var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
+
+				var mesh = new THREE.Mesh( geometry, material );
+				mesh.position.y = - 250;
+				mesh.rotation.x = - Math.PI / 2;
+				group.add( mesh );
+
+				renderer = new THREE.CanvasRenderer();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				container.appendChild( renderer.domElement );
+
+			/*	stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+*/
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize() {
+
+				windowHalfX = window.innerWidth / 2;
+				windowHalfY = window.innerHeight / 2;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+			
+			function onDocumentMouseDown( event ) {
+
+				event.preventDefault();
+
+				var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+				projector.unprojectVector( vector, camera );
+				var loader2 = new THREE.OBJMTLLoader();
+				loader2.addEventListener( 'load', function ( event ) {
+
+					var object = event.content;
+					object.scale.set(10,10,10);
+					object.position.y = vector.y;
+					object.position.x = vector.x;
+					object.position.z = 150;
+					myfood=object;
+					if(isfeed==1)
+					{
+					scene.add( myfood );
+					objects.push(myfood);
+					}
+					totalfood++;
+
+				});
+				
+				loader2.load('img/food.obj','img/food.mtl');
+				
+
+				
+			}		
+			function onDocumentMouseMove( event ) {
+				dofeed();
+
+				mouseX = ( event.clientX - windowHalfX );
+				mouseY = ( event.clientY - windowHalfY );
+
+			}
+
+			
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+				myfoodmove();
+				render();
+				stats.update();
+
+			}
+
+			function render() {
+
+				camera.position.x += ( mouseX - camera.position.x ) * 0.05;
+				camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
+				camera.lookAt( scene.position );
+				
+				group.rotation.y -= 0.005;
+
+				renderer.render( scene, camera );
+
+			}
+			function myfoodmove(){
+				var object;
+				for(var i=0;i<totalfood;i++)
+				{
+					objects[i].translateZ(-10);
+					
+					if(objects[i].position.z<-200)
+					{
+					
+						myfood=objects[i];
+						scene.remove(myfood);
+					}
+					if((objects[i].position.x-myfish.position.x)<5&&(objects[i].position.y-myfish.position.y)<5&&(objects[i].position.z-myfish.position.z)<5)
+					{
+						myfood=objects[i];
+						scene.remove(myfood);
+						
+						
+					}
+				}
+			}
+			function dofeed()
+			{
+				var url=window.location.toString(); //取得當前網址
+				var str=""; //參數中等號左邊的值
+				var str_value=""; //參數中等號右邊的值
+				if(url.indexOf("?")!=-1){
+  					  //如果網址有"?"符號
+    					var ary=url.split("?")[1].split("&");
+    					//取得"?"右邊網址後利用"&"分割字串存入ary陣列 ["a=1","b=2","c=3"]
+    					for(var i in ary){
+        				//取得陣列長度去跑迴圈，如:網址有三個參數，則會跑三次
+        			str=ary[i].split("=")[0];
+				
+				
+       				 //取得參數"="左邊的值存入str變數中
+        			if (str == "feed") {
+        			//若str等於想要抓取參數 如:b
+            			str_value = decodeURI(ary[i].split("=")[1]);
+        		    //取得b等號右邊的值並經過中文轉碼後存入str_value
+        			}
+				}
+			}
+				if(str_value=="1")
+				{
+					isfeed=1;
+								
+				}
+			
+			}
+</script>
+			}
+
+		</script>
+		
+   
+</form>
+
+	</body>
+</html>
