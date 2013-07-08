@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<meta charset="UTF-8">
+<head>
+<title>遊戲時間</title>
+</head>
+<body>
+<script>
+		var hour=GetCookie("hour");
+                var min=GetCookie("min");
+                pass();
+                //alert(min);
+                function pass(){
+                var url='time.php?hour='+hour+"&min="+min;
+                self.location=url;
+                }
+                
+                function SetCookie(name,value){
+                        var NameString = name + "=" + value;
+                                document.cookie = NameString;
+                        }
+
+                function GetCookie(name) { 
+                        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)")); 
+                        if(arr != null) return unescape(arr[2]); return null; 
+}
+
+</script>
+</dody>

@@ -134,7 +134,7 @@
        	  <li>
             <ul class="feed"><li><a href="index.html?feed=1" target="_blank">餵食</a></li></ul></li>
             <li><ul class="time"><li><a href="time.html" target="_blank"> 時間</a></li></ul></li>
-            <li><ul class="pic"><li><a href="index.html?decoration=1"> 裝飾</a></li></ul></li>
+            <li><ul class="pic"><li><a href="#"> 裝飾</a></li></ul></li>
             <li><ul class="money"><li><a href="#"> 金錢</a></li></ul></li>        	
         </ul>
     </li>
@@ -159,48 +159,29 @@
 		<script src="js/Detector.js"></script>
 		<script src="js/libs/stats.min.js"></script>
 		<script>
-			var initok;
+
 			var container, stats;
 			var camera, scene, renderer;
 			var group;
 			var mouseX = 0, mouseY = 0;
-			var partid = [];
-			var posX = [];
-			var posY = [];
-			var posZ = [];
-			var dposX;
-			var dposY;
+
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
-			var isfeed,isdecoration;
-			var decos = [];
-			var mydeco;
-			var mydecoration;
+			var isfeed;
 			var myfish = new THREE.Object3D();
 			var myfood = new THREE.Object3D();
 			var objects = [];
 			var projector;
 			var totalfood;
-			var total;
-			var mydecorationX;
-			var mydecorationY;
-			var hour=0;
-			var min=0;
-			var sec=0;
 			init();
 			animate();
-			var inits,writedb,isput;
-		
+
 			function init() {
-				var myVar=setInterval(function(){myTimer()},1000);
-				dofeed();
+
 				container = document.getElementById( 'container' );
-			
+
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 				camera.position.z = 500;
-				
-				
-					
 
 				scene = new THREE.Scene();
 				projector = new THREE.Projector();
@@ -248,22 +229,8 @@
 
 				});
 				loader.load('img/fish.obj','img/fish.mtl');
-		//		console.log(myfish);
 				// shadow
-				var i;
-				total=GetCookie("total");	
-				for(i=0;i<total;i++)
-				{
-							
-					
-							var tmpx="posX"+i;
-							var tmpy="posY"+i;
-							var tmpz="posZ"+i;
-							posX[i]=GetCookie(tmpx);
-							posY[i]=GetCookie(tmpy);
-							posZ[i]=GetCookie(tmpz);
-							initdecoration(posX[i],posY[i],posZ[i],1);
-				}
+
 				var canvas = document.createElement( 'canvas' );
 				canvas.width = 128;
 				canvas.height = 128;
@@ -291,9 +258,7 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 				container.appendChild( renderer.domElement );
-		
 
-				//controls.addEventListener( 'change', render );
 			/*	stats = new Stats();
 				stats.domElement.style.position = 'absolute';
 				stats.domElement.style.top = '0px';
@@ -301,69 +266,12 @@
 */
 				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-								
-//				 
-				document.addEventListener('DOMMouseScroll', mousewheel, false);
-				document.addEventListener('mousewheel', mousewheel, false);
+				//
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
 			}
-			function initdecoration(x,y,z,tmpid)
-			{
-				var i;
-				var tmpid,tmpx,tmpy,tmpz;
-				var loader3;
-				
-					if(tmpid==1)
-					{
-						 loader3=new THREE.OBJMTLLoader();
-						
-                                      		loader3.addEventListener( 'load', function ( event ) {
-							 
 
-                                        		var object = event.content;
-	                                        	object.scale.set(10,10,10);
-        	                                	object.position.y = x;
-                	                        	object.position.x = y;
-                        	               		object.position.z = z;	
-		                               	       decos.push(object);
-                	                        	scene.add( object );
-				
-							
-                               			 });
-						
-							
-                              			  loader3.load('img/monkey.obj','img/monkey.mtl');
-				}	
-			}
-			function mousewheel( event ) {
-			  var amount = 100; // parameter
-
-			      // get wheel direction 
-			       var d = ((typeof event.wheelDelta != "undefined")?(-event.wheelDelta):event.detail);
-				d = 100 * ((d>0)?1:-1);
-
-				// do calculations, I'm not using any three.js internal methods here, maybe there is a better way of doing this
-				// applies movement in the direction of (0,0,0), assuming this is where the camera is pointing
-				var cPos = camera.position;
-				var r = cPos.x*cPos.x + cPos.y*cPos.y;
-				var sqr = Math.sqrt(r);
-				var sqrZ = Math.sqrt(cPos.z*cPos.z + r);
-
-				var nx = cPos.x + ((r==0)?0:(d * cPos.x/sqr));
-				var ny = cPos.y + ((r==0)?0:(d * cPos.y/sqr));
-				var nz = cPos.z + ((sqrZ==0)?0:(d * cPos.z/sqrZ));
-
-				// verify we're applying valid numbers
-				if (isNaN(nx) || isNaN(ny) || isNaN(nz))
-				  return;
-
-				cPos.x = nx;
-				cPos.y = ny;
-				cPos.z = nz;
-				console.log(cPos);
-			}
 			function onWindowResize() {
 
 				windowHalfX = window.innerWidth / 2;
@@ -375,49 +283,11 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
 			}
-			function myTimer()
-			{
-				sec++;
-				fishmove();	
-				if(sec==60)
-				{
-					min++;
-					sec=0;
-					SetCookie("hour",hour);
-					SetCookie("min",min);
-					
-
-				}
-				if(min==60)
-				{
-					hour++;
-					min=0;
-					SetCookie("hour",hour);
-					SetCookie("min",min);
-
-				}
-				
-			}
+			
 			function onDocumentMouseDown( event ) {
 
 				event.preventDefault();
-				isdecoration=3;
-				if(writedb==1)
-				{	
-					total=GetCookie("total");
-					total++;
-					var url='deco.php?db=1&partid=1&posX='+mydecorationX+'&posY='+mydecorationY+'&posZ=150&id='+total;
-					location.href=url;
-					partid=-1;
-					var tmpstrx="posX"+total;
-					var tmpstry="posY"+total;
-					var tmpstrz="posZ"+total;
-					SetCookie(tmpstrx,mydecorationX);
-					SetCookie(tmpstry,mydecorationY);
-					SetCookie(tmpstrz,150);
-				
-				
-				}
+
 				var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
 				projector.unprojectVector( vector, camera );
 				var loader2 = new THREE.OBJMTLLoader();
@@ -443,52 +313,12 @@
 				}
 
 				
-			}
- 				function fishmove(){
-				var maxNum = 10;  
-				var minNum = 0;  
-				var n = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum; 
-				switch(n)
-				{
-					case 1: 
-						myfish.translateX(1);
-					case 2:
-						myfish.translateY(1);
-					case 3:
-						myfish.translateZ(1);
-					case 4:
-						myfish.translateX(-1);
-					case 5:
-						myfish.translateY(-1);
-					case 6:
-						myfish.translateZ(-1);
-					case 7:
-					
-						if(myfish.position.x<-180)
-							myfish.translateX(200);
-						if(myfish.position.x>180)
-							myfish.translateX(-200);
-					case 8:						
-						if(myfish.position.y<-130)
-							myfish.translateY(150);
-						if(myfish.position.y>130)
-							myfish.translateY(-150);
-					case 9:
-						if(myfish.position.z<130)
-							myfish.translateZ(150);
-						if(myfish.position.z>130)
-							myfish.translateZ(-150);
-				}
 			}		
 			function onDocumentMouseMove( event ) {
 				dofeed();
-			//	fishmove();
-				
+
 				mouseX = ( event.clientX - windowHalfX );
 				mouseY = ( event.clientY - windowHalfY );
-				movedecoration(mouseX,mouseY);
-				dposX=mouseX;
-				dposY=mouseY;
 
 			}
 
@@ -498,10 +328,8 @@
 
 				requestAnimationFrame( animate );
 				myfoodmove();
-				
-				putdecoration();
 				render();
-				//stats.update();
+				stats.update();
 
 			}
 
@@ -511,28 +339,10 @@
 				camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
 				camera.lookAt( scene.position );
 				
-			
 				group.rotation.y -= 0.005;
 
 				renderer.render( scene, camera );
 
-			}
-			  
-
-	
-			function movedecoration(x,y)
-			{	
-				if(isdecoration==2)
-				{
-					mydecorationX=x;
-					mydecorationY=y;
-					var object=mydecoration;
-					object.position.x=x;
-					object.position.y=y;
-					partid=1;	
-					writedb=1;
-				
-				}
 			}
 			function myfoodmove(){
 				var object;
@@ -555,129 +365,42 @@
 					}
 				}
 			}
-			function putdecoration()
-			{
-				if(isdecoration==1)
-                                {
-                                var loader = new THREE.OBJMTLLoader();
-                                loader.addEventListener( 'load', function ( event ) {
-
-                                        var object = event.content;
-                                        object.scale.set(10,10,10);
-                                        object.position.y = 0;
-                                        object.position.x = 0;
-                                        object.position.z = 0;
-                                        mydecoration=object;
-                                        scene.add( object );
-                                        
-
-                                });
-                                loader.load('img/monkey2.obj','img/monkey2.mtl');
-                                        isdecoration=2;
-					
-                                }
-			}
 			function dofeed()
 			{
 				var url=window.location.toString(); //取得當前網址
-				var j=0;
 				var str=""; //參數中等號左邊的值
 				var str_value=""; //參數中等號右邊的值
 				if(url.indexOf("?")!=-1){
   					  //如果網址有"?"符號
     					var ary=url.split("?")[1].split("&");
-			    			
-		//取得"?"右邊網址後利用"&"分割字串存入ary陣列 ["a=1","b=2","c=3"]
+    					//取得"?"右邊網址後利用"&"分割字串存入ary陣列 ["a=1","b=2","c=3"]
     					for(var i in ary){
         				//取得陣列長度去跑迴圈，如:網址有三個參數，則會跑三次
         			str=ary[i].split("=")[0];
 				
 				
        				 //取得參數"="左邊的值存入str變數中
-        			if (str == "feed"||str=="decoration") {
+        			if (str == "feed") {
         			//若str等於想要抓取參數 如:b
             			str_value = decodeURI(ary[i].split("=")[1]);
         		    //取得b等號右邊的值並經過中文轉碼後存入str_value
         			}
-			
-				if(str == "total")
-				{
-					 total=decodeURI(ary[i].split("=")[1]);
-					SetCookie("total",total);
-				}
-				var tmpstrx="posX"+j;
-				var tmpstry="posY"+j;
-				var tmpstrz="posZ"+j;
-					if(str==tmpstrx)
-					{
-						var tmp=decodeURI(ary[i].split("=")[1]);					SetCookie(tmpstrx,tmp);
-						posX.push(tmp);
-					}
-					 if(str==tmpstry)
-                                        {
-                                                var tmp=decodeURI(ary[i].split("=")[1]);
-        					posY.push(tmp);
-                                        }
-					 if(str==tmpstrz)
-                                        {
-                                                var tmp=decodeURI(ary[i].split("=")[1]);
-       						posZ.push(tmp);
-						j++;
-						
-                                        }
-					if(str=="partid")
-					{
-						 var tmp=decodeURI(ary[i].split("=")[1]);
-						partid.push(tmp);
-						
-					}
-					
-					if(str=="decoration"&&isdecoration!=2)
-					{
-						
-						isdecoration=1;
-					}
-
-
 				}
 			}
-				if(str_value=="1"&&str=="feed")
+				if(str_value=="1")
 				{
 					isfeed=1;
-					
+								
 				}
-
 			
 			}
-		function SetCookie(name,value){
-			var NameString = name + "=" + value;
-				document.cookie = NameString;
+</script>
 			}
 
-		function GetCookie(name) { 
-			var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)")); 
-			if(arr != null) return unescape(arr[2]); return null; 
-}
 		</script>
 		
    
 </form>
-<!--<?
-$writedb=$_GET['db'];
-$partid=$_GET['partid'];
-$posX=$_GET['posX'];
-$posY=$_GET['posY'];
-$posZ=$_GET['posZ'];
-$con = mysql_connect('localhost', 'root', '@12345');
-if (!$con)
-  { 
-  die('Could not connect: ' . mysql_error());
-  }
 
-mysql_select_db("waterhouse", $con);
-$sql="INSERT INTO `decoration` (`id`, `name`, `obj`, `mtl`, `positionX`, `positionY`, `positionZ`, `partid`) VALUES (2,'monkey','monkey.obj','monkey.mtl',$posX,,$posY,$posZ,1)";
-if($writedb==1)
-	$result = mysql_query($sql);
-?>-->
 	</body>
 </html>

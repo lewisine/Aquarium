@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-tw">
+<head>
+<meta charset="UTF-8">
+<title>模擬水族箱
+</title>
+<script>
+		  window.onload = function(){
+                var canvas = document.getElementById("myCanvas");
+                var context = canvas.getContext("2d");
+                
+              var rectWidth = 700;
+                var rectHeight = 100;
+                var rectX = canvas.width / 2 - rectWidth / 2;
+                var rectY = canvas.height / 2 - rectHeight / 2;
+                
+                var cornerRadius = 100;
+		var loading=1;
+                
+               var roundedRect=function(ctx,x,y,width,height,radius,fill,stroke)
+		{
+		    ctx.save();	// save the context so we don't mess up others
+		    ctx.beginPath();
+
+		    // draw top and top right corner
+		    ctx.moveTo(x+radius,y);
+		    ctx.arcTo(x+width,y,x+width,y+radius,radius);
+
+		    // draw right side and bottom right corner
+		    ctx.arcTo(x+width,y+height,x+width-radius,y+height,radius); 
+
+		    // draw bottom and bottom left corner
+		    ctx.arcTo(x,y+height,x,y+height-radius,radius);
+
+		    // draw left and top left corner
+		    ctx.arcTo(x,y,x+radius,y,radius);
+
+		    if(fill){
+			ctx.fill();
+		    }
+		    if(stroke){
+			ctx.stroke();
+		    }
+		    ctx.restore();	// restore context to what it was on entry
+		}
+		var roundedRect2=function(ctx,x,y,width,height,radius,fill,stroke)
+		{
+		    ctx.save();	// save the context so we don't mess up others
+		    ctx.beginPath();
+
+		    // draw top and top right corner
+		    ctx.moveTo(x+radius,y);
+		    //ctx.arcTo(x+width,y,x+width,y+radius,radius);
+
+		    // draw right side and bottom right corner
+		    //ctx.arcTo(x+width,y+height,x+width-radius,y+height,radius); 
+			ctx.lineTo(x+width,y);
+			ctx.lineTo(x+width,y+height);
+		    // draw bottom and bottom left corner
+		    ctx.arcTo(x,y+height,x,y+height-radius,radius);
+
+		    // draw left and top left corner
+		    ctx.arcTo(x,y,x+radius,y,radius);
+
+		    if(fill){
+			ctx.fill();
+		    }
+		    if(stroke){
+			ctx.stroke();
+		    }
+		    ctx.restore();	// restore context to what it was on entry
+		}
+		context.strokeStyle='rgb(0,0,0)';
+		context.lineWidth=5;
+		roundedRect(context,15,200,1000,100,20,false,true);
+		context.fillStyle='rgba(0,120,250,1)';
+		roundedRect2(context,15,200,loading*1000,100,20,true,false);
+            };
+		
+</script>
+<body>
+<div>
+<form action= "index.html" method = "post" name = "form1">
+ <input type="submit" value = "進入遊戲"/>
+</form>
+</div>
+<div id="load">
+<canvas id="myCanvas" width="1280" height="1080"> 
+</canvas></div>
+
+</body>
+</html>
