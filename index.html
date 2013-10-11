@@ -4,149 +4,201 @@
 		<title>three.js canvas - geometry - earth</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style text="text/css">
-			body {
-				font-family: Monospace;
-				background-color: #AAFFEE;
-				color: #fff;
-				margin: 0px;
-				overflow: hidden;
-			}
-/*			div{
-			    cursor: url('cursor/cursor.png'), default;
-			}
-*/	
-
-			#info {
-				position: absolute;
-				top: 0px; width: 100%;
-				padding: 5px;
-			}
-
-			a {
-
-				color: #0080ff;
-			}
-			.navi {  /* 메뉴 전체 영역에 대한 스타일 */
-	list-style-type: none; /* 불릿 기호 없앰 */
-	height: 40px; /* 내비게이션 높이 */
-	padding: 0; 
-	margin: 0; 
-}
-.navi li { /* 메뉴 각 항목에 대한 스타일 */
-	float: left; /* 왼쪽부터 표시 */
-	position: relative; /* 순서대로 표시 */
-	padding: 0; /* 안여백 없음 */
-	line-height: 40px; /* 줄간격 */
-	background:#600;  /* 내비게이션 전체 배경색 */
-}
-
-.navi li a { /* 메뉴 항목에서도 링크에 대한 스타일 */
-	display: block; /* 영역을 만듦 */
-	font-family:"굴림"; /* 글꼴 */
-	font-weight:600; /* 진하게 */
-	font-size:14px;	/* 글자크기 */
-	padding: 5px 25px; /* 안여백 */	
-	color: #fff; /* 메인 메뉴 글자색 */
-	text-decoration: none; /* 밑줄 없앰 */
-}
-.navi li a:hover { /*script src="js/libs/stats.min.js 메인 메뉴에 마우스 오버했을 때의 스타일 */
-	color:#F90; /* 마우스 오버했을 때 글자색 */
-}
-.navi li ul {  /* 서브 메뉴 영역에 대한 스타일 */
-	opacity: 0; /* 투명하게 표시 - 결국 평소엔 안보임 */
-	position: absolute; /* 고정 위치에 표시 */
-	left: 0; /* left 좌표는 메인 메뉴에서 움직이지 않음 */
-	width: 180px; /* 서브 메뉴 너비 */
-	background: #D8AFAF; /* 서브 메뉴 배경색 */
-	list-style-type: none; /* 서브 메뉴 항목의 불릿 없앰 */
-	padding: 0; /* 안여백 없음 */
-	margin: 0;  /* 여백 없음 */
-}
-.navi li:hover ul { /* 메인 메뉴 위로 마우스 오버했을 때 서브 메뉴 스타일 */
-	opacity: 1; /* 서브 메뉴 불투명해짐 -> 화면에 보임 */
-}
-.navi li ul li { /* 서브 메뉴 각 항목의 스타일 */
-	float: none; /* 플로팅하지 않음 */
-	position: static; /* 항목 크기에 맞게 배치됨 */
-	height: 0; /*높이값 없음 */
-	line-height: 0; /* 줄간격 없음 */
-	background: none; /* 배경 없음*/
-}
-.navi li:hover  ul li { 
-	height: 50px; 
-	line-height: 20px; 
-	padding:5px 0;
+ 	<style text="text/css">
+	body {
 	
+				font-family: Monospace;
+                                background-color: #AAFFEE;
+                                color: #fff;
+                                margin: 0px;
+                                overflow: hidden;
+	}
+#menu {
+	/* 選單大小 */
+	width:600px;
+	height:30px;
 }
-.navi li ul li a {
+#menu ul {
+	/* 取消ul樣式符號 */
+	list-style-type:none;
+	/* 重設ul邊界與留白為零 */
+	margin:0;
+	padding:0;
+	/* 內有浮動元件時，需設overflow才會自動調整大小 */
+	overflow:auto;
+}
+* html #menu ul {
+	/* 解決IE6不理overflow問題，直接指定高度 */
+	height:30px;
+}
+#menu ul li {
+	/* 利用float讓第一層li水平排列 */
+	float:left;
+}
+/* 解決IE6條列式餘白問題*/
+* html #menu ul li {
+	display:inline;
+}
+#menu ul li a {
+	/* 將a改為區塊元件，以便指定寬高 */
 	display:block;
-	height:50px;
-	width:50px;
-/*	background:url("img/apple.png") left no-repeat;	*/
-	/*background: #D8AFAF; 
-	font-family:"標楷體";
-	font-weight:600; 
-	font-size:14px;
-	color:#900;*/
+	/* 這邊也要設float，否則IE6會以100%寬度顯示 */
+	float:left;
+	/* 固定高度 */
+	height:30px;
+	width: 100px;
+	text-align: center;
 }
-.navi li ul li .feed{
-	display:block;
-	height:50px;
-	width:50px;
-	background:url("img/apple.png") left no-repeat;
+#menu ul li ul {
+	/* 讓第二層ul跳脫文件流以利定位 */
+	position:absolute;
+	/* 固定寬度 */
+	width:100px;
+	/* 避免出現捲軸 */
+	overflow:visible;
+	/* 讓ul與母階層li相同位置 */
+	clear:left;
+	margin-top: 30px;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0;
 }
-.navi li ul li .time{
-	display:block;
-	height:50px;
-	width:50px;
-	background:url("img/time.png") left no-repeat;
+/* 修正IE7絕對定位差異 */
+*:first-child+html #menu ul li ul {
+	margin-top:0;
 }
-.navi li ul li .pic{
-	display:block;
-	height:50px;
-	width:50px;
-	background:url("img/picture.png") left no-repeat;
+/* 修正IE6絕對定位差異 */
+* html #menu ul li ul {
+	margin-top:0;
 }
-.navi li ul li .money{
-	display:block;
-	height:50px;
-	width:50px;
-	background:url("img/money.png") left no-repeat;
+#menu ul li ul li {
+	/* 覆寫繼承自第一層的浮動設定 */
+	float:none;
+	text-align: center;
 }
-.navi li ul li a:hover { 
-	background: #900;
+#menu ul li ul li a {
+	/* 覆寫繼承自第一層的浮動設定 */
+	float:none;
+	width: 100%;/* 註：display、height、padding繼承第一層的設定 */
 }
+#menu ul li ul li ul {
+	margin-top: -30px;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 100px;
+	width: 100%;
+}
+/* 修正IE7絕對定位差異 */
+*:first-child+html #menu ul li ul li ul {
+	margin-top:-30px;
+}
+#menu ul li ul li ul li {
+/* width、float繼承第二層，免設定 */
+}
+#menu ul li ul li ul li a {
+/* width、float繼承第二層，免設定 */
+}
+/* ---------- 隱藏與顯示階層 ---------- */
+#menu ul li ul {
+	/* 預先隱藏第二層 */
+	visibility:hidden;
+}
+#menu ul li:hover ul {
+	/* 觸動第一層時，顯示第二層 */
+	visibility:visible;
+}
+#menu ul li:hover ul li ul {
+	/* 顯示第二層時，隱藏第三層，避免同時彈出 */
+	visibility:hidden;
+}
+#menu ul li ul li:hover ul {
+	/* 觸動第二層時，顯示第三層 */
+	visibility:visible;
+}
+#menu ul li ul li:hover ul li ul {
+	/* 顯示第三層時，隱藏第四層，避免同時彈出 */
+	visibility:hidden;
+}
+#menu ul li ul li ul li:hover ul {
+	/* 觸動第三層時，顯示第四層 */
+	visibility:visible;
+}
+/* ---------- 以下為美化用，非必需 ---------- */
 
-.navi li { -webkit-transition: all 0.2s; }
-.navi li a { -webkit-transition: all 0.5s; }
-.navi li ul { -webkit-transition: all 1s; }
-.navi li ul li { -webkit-transition: height 0.5s; }
 
-		</style>
-	</head>
+/* 預設字體 */
+#menu {
+	font-size:12px;
+	font-family:Arial, Helvetica, sans-serif;
+}
+/* 第一層ul背景色彩與邊框 */
+#menu ul {
+	background:#6f6f6f;
+}
+/* 第一層a字型 */
+#menu ul li a {
+	color:#FFF;
+	text-decoration:none;
+	line-height: 30px;
+}
+/*第二層ul背景色彩與邊框  */
+#menu ul li ul {
+	background:#efefef;
+}
+/* 第二層a字型 */
+#menu ul li ul li a {
+	font-size:12px;
+	color:#333333;
+	text-decoration:none;
+}
+/* 觸動第一層li時，改變背景色 */
+#menu ul li:hover, #menu ul li a:hover {
+	background:#efefef;
+}
+#menu ul li:hover a {
+	color:#333333;
+}
+/* 觸動第二層以上li時改變背景色 */
+#menu ul li ul li:hover, #menu ul li ul li a:hover {
+	background:#dfdfdf;
+}
+</style>
 	<body>
-	<div id="menu">
-	<ul class="navi">
-	<li><a href="#"> Home </a></li>
-	<li><a href="#"> 動作</a>
-    	<ul>
-       	  <li>
-            <ul class="feed"><li><a href="index.html?feed=1" target="_blank">餵食</a></li></ul></li>
-            <li><ul class="time"><li><a href="time.html" target="_blank"> 時間</a></li></ul></li>
-            <li><ul class="pic"><li><a href="index.html?decoration=1"> 裝飾</a></li></ul></li>
-            <li><ul class="money"><li><a href="#"> 金錢</a></li></ul></li>        	
-        </ul>
+<div id="menu">
+  <ul>
+    <li> <a href="#">Home</a>
+      <ul>
+        
+      </ul>
     </li>
-	<li><a href="#"> Help </a>
-    	<ul>
-         	<li><a href="#"> Q & A </a></li>
-            <li><a href="#"> Help Index</a></li>      	
-        </ul> 
-    </li>  
-	<li><a href="#"> 商城</a></li>            
-</ul>
-</div>
+    <li> <a href="#">動作</a>
+      <ul>
+	<li><a href="index.html?feed=1" target="_blank">餵食</a><img src="img/apple.png"></li>
+        <li><a href="time.html" target="_blank">時間</a><img src="img/time.png"></li>
+        <li><a href="#">裝飾</a><img src="img/picture.png">
+		<ul>
+			<li><a href="insert.html">新增</a></li>
+			<li><a href="#">搬移</a></li>
+		</ul>
+	</li>
+	
+        <li><a href="#">金錢</a><img src="img/money.png"></li>
+      </ul>
+    </li>
+    <li> <a href="#">Help</a>
+      <ul>
+        <li><a href="#">Q & A</a></li>
+        <li><a href="#">Help Index</a></li>
+          
+        
+       </ul>
+	</li>
+       <li><a href="#">商城</a></li>
+            
+          
+        </li>
+  </ul>
+</div> 
 
 		<div id="container"></div>
 		
